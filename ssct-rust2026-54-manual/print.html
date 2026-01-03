@@ -1,0 +1,827 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>SSCT Rust2026 #54 服务器手册</title>
+        <meta name="robots" content="noindex">
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="SSCT 课题组 Rust2026-54 服务器 (Dell PowerEdge R760) 多用户开发环境使用指南">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="favicon-8114d1fc.png">
+        <link rel="stylesheet" href="css/variables-8adf115d.css">
+        <link rel="stylesheet" href="css/general-2459343d.css">
+        <link rel="stylesheet" href="css/chrome-ae938929.css">
+        <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex-c4028e1a.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc-502834b1.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">SSCT Rust2026 #54 服务器手册</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+                        <a href="https://github.com/yxdai-nju/ssct-rust2026-54-manual" title="Git repository" aria-label="Git repository">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h1 id="开始使用"><a class="header" href="#开始使用">开始使用</a></h1>
+<p>这台服务器是一台 Dell PowerEdge R760，配备 64 核 128 线程 CPU 和 512GB 内存，供同学们共享使用。每位同学拥有独立的工作区容器和持久化存储空间，彼此隔离。</p>
+<h2 id="当前用户"><a class="header" href="#当前用户">当前用户</a></h2>
+<p>本服务器供 SSCT 实验室的同学使用，主要用于科研项目开发、实验运行等场景。当前已分配的账号如下：</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>账号</th><th>姓名</th><th>账号</th><th>姓名</th></tr>
+</thead>
+<tbody>
+<tr><td>stu01</td><td>陈力航</td><td>stu11</td><td></td></tr>
+<tr><td>stu02</td><td>戴宇轩</td><td>stu12</td><td></td></tr>
+<tr><td>stu03</td><td>刘宏旺</td><td>stu13</td><td></td></tr>
+<tr><td>stu04</td><td>李希悦</td><td>stu14</td><td></td></tr>
+<tr><td>stu05</td><td>马攀</td><td>stu15</td><td></td></tr>
+<tr><td>stu06</td><td>张耀坤</td><td>stu16</td><td></td></tr>
+<tr><td>stu07</td><td>陈润涛</td><td>stu17</td><td></td></tr>
+<tr><td>stu08</td><td>时欣</td><td>stu18</td><td></td></tr>
+<tr><td>stu09</td><td>姜佳良</td><td>stu19</td><td></td></tr>
+<tr><td>stu10</td><td>李陈扬</td><td>stu20</td><td></td></tr>
+</tbody>
+</table>
+</div>
+<p>如果你有使用需求但不在列表中，请直接微信联系戴宇轩。</p>
+<h2 id="配置-ssh"><a class="header" href="#配置-ssh">配置 SSH</a></h2>
+<p>在你本地电脑的 <code>~/.ssh/config</code> 中添加以下内容，把 <code>XX</code> 替换成你的编号（如 <code>01</code>、<code>09</code>、<code>10</code>）：</p>
+<pre><code>Host rust2026
+  HostName 114.212.189.54
+  Port 322XX
+  User rust
+  StrictHostKeyChecking no
+  UserKnownHostsFile /dev/null
+
+Host rebuild
+  HostName 114.212.189.54
+  Port 22
+  User stuXX
+</code></pre>
+<p>配置完成后，你可以使用两个命令：</p>
+<ul>
+<li><code>ssh rust2026</code>：进入你的工作区容器，日常开发在这里进行</li>
+<li><code>ssh rebuild</code>：触发容器重建（修改 Dockerfile 后执行）</li>
+</ul>
+<h2 id="安全提醒"><a class="header" href="#安全提醒">安全提醒</a></h2>
+<p>部分同学从原 Rust2024 机器迁移过来，<code>~/.ssh/authorized_keys</code> 文件中可能残留其他同学的公钥。请尽快检查该文件，只保留你自己的公钥。</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="环境说明"><a class="header" href="#环境说明">环境说明</a></h1>
+<p>你通过 <code>ssh rust2026</code> 进入的是一个运行在服务器上的容器，称为“工作区容器”。这个容器由你 home 目录下的 Dockerfile 定义，你可以自由定制其中的软件环境。</p>
+<p>容器内预装了常用软件，包括 <code>git</code>、<code>vim</code>、<code>tmux</code>、<code>htop</code> 等。同时预装了 <code>build-essential</code>，包含 <code>gcc</code>、<code>g++</code>、<code>make</code> 等编译工具链，可用于编译 C/C++ 项目和 Rust 项目的本地依赖。容器内还预装了 <code>kubectl</code> 和 <code>docker</code> 命令行工具，方便你部署服务和构建镜像，后续章节会详细介绍它们的用法。</p>
+<h2 id="哪些内容会保留"><a class="header" href="#哪些内容会保留">哪些内容会保留</a></h2>
+<p>以下目录和文件在容器重建后保留，不会丢失：</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>路径</th><th>用途</th></tr>
+</thead>
+<tbody>
+<tr><td><code>~/workspace/</code></td><td>存放项目和代码</td></tr>
+<tr><td><code>~/workspace/.container/</code></td><td>存放 Dockerfile 和构建所需文件</td></tr>
+<tr><td><code>~/.ssh/</code></td><td>SSH 密钥和配置</td></tr>
+<tr><td><code>~/.gnupg/</code></td><td>GPG 密钥</td></tr>
+<tr><td><code>~/.kube/</code></td><td>Kubernetes 配置</td></tr>
+<tr><td><code>~/.vscode-server/</code></td><td>VS Code Remote 插件和设置</td></tr>
+<tr><td><code>~/.bash_history</code></td><td>命令历史</td></tr>
+<tr><td><code>/data/</code></td><td>存放数据</td></tr>
+</tbody>
+</table>
+</div>
+<p>这些目录的数据存储在主机上，容器重建不会影响它们。服务器每晚凌晨 3 点自动创建快照备份，保留最近 30 天的快照。如果误删文件，可以微信联系戴宇轩请求恢复。</p>
+<h2 id="哪些内容不会保留"><a class="header" href="#哪些内容不会保留">哪些内容不会保留</a></h2>
+<p>容器重建后，以下内容会丢失：</p>
+<ul>
+<li>运行中的进程（包括 tmux、screen 会话）</li>
+<li>上述目录之外的文件</li>
+<li>通过 <code>apt install</code> 直接安装但未写入 Dockerfile 的软件</li>
+</ul>
+<p>如果你需要某个软件在重建后仍然存在，请将安装命令写入 Dockerfile。</p>
+<h2 id="网络地址"><a class="header" href="#网络地址">网络地址</a></h2>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>地址</th><th>含义</th><th>典型用途</th></tr>
+</thead>
+<tbody>
+<tr><td><code>127.0.0.1</code></td><td>工作区容器内部</td><td>工作区内进程间通信</td></tr>
+<tr><td><code>10.42.0.1</code></td><td>服务器主机</td><td>访问你用 Docker 启动的服务</td></tr>
+<tr><td>Service 名称（如 <code>my-postgres</code>）<sup>*</sup></td><td>你部署的服务</td><td>访问用 kubectl 部署的服务</td></tr>
+</tbody>
+</table>
+</div>
+<p><sup>*</sup> <code>kubectl</code> 是 Kubernetes 的命令行工具，后续章节会详细介绍如何用它部署服务。</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="定制环境"><a class="header" href="#定制环境">定制环境</a></h1>
+<p>直接在容器里执行 <code>apt install</code> 或 <code>pip install</code> 可以临时安装软件，但容器重建后这些软件会消失。把安装命令写入 Dockerfile，每次重建都会自动执行，环境始终保持一致。</p>
+<p>这样做还有额外好处：你可以随意折腾，随便安装东西、删系统文件，不用担心后果——重建一下就恢复了。当你想配置较复杂的环境时，可以把 Dockerfile 发给大模型，让它帮忙修改。重建后即可得到新环境，出问题可退回到之前的版本重来。</p>
+<h2 id="dockerfile-位置"><a class="header" href="#dockerfile-位置">Dockerfile 位置</a></h2>
+<p>Dockerfile 位于 <code>~/workspace/.container/Dockerfile</code>。你可以在它的目录下放置其他文件，然后在 Dockerfile 中用 <code>COPY</code> 指令复制到容器内。</p>
+<p>例如你下载了一个 <code>.deb</code> 安装包（<code>qtspim_9.1.24_linux64.deb</code>）想要安装，可以把它放到 <code>~/workspace/.container/</code> 目录下，然后在 Dockerfile 中添加：</p>
+<pre><code class="language-dockerfile">COPY qtspim_9.1.24_linux64.deb /tmp/qtspim_9.1.24_linux64.deb
+RUN apt-get update \
+    &amp;&amp; apt-get install -y /tmp/qtspim_9.1.24_linux64.deb \
+    &amp;&amp; apt-get clean \
+    &amp;&amp; rm -rf /var/lib/apt/lists/* \
+    &amp;&amp; rm -f /tmp/qtspim_9.1.24_linux64.deb
+</code></pre>
+<h2 id="重建流程"><a class="header" href="#重建流程">重建流程</a></h2>
+<p>修改 Dockerfile 后，在你的本地电脑上（平时执行 <code>ssh rust2026</code> 所用的电脑）执行：</p>
+<pre><code class="language-bash">ssh rebuild
+</code></pre>
+<p>这会触发镜像构建、推送和容器更新。构建完成后你的 SSH 连接会断开，稍等片刻重新连接即可。</p>
+<h2 id="完整示例"><a class="header" href="#完整示例">完整示例</a></h2>
+<p>以下是文档编写者自己在用的 Dockerfile 模板。你可以在此基础上修改，删除不需要的部分或添加自己的工具。</p>
+<pre><code class="language-dockerfile"># 基础镜像，可以换成 Ubuntu、Alpine 等
+FROM docker.io/library/debian:trixie-20251229
+
+ARG USERNAME="rust"
+ARG USER_UID
+ARG USER_GID
+
+# ============================================================================
+# 系统软件包/常用软件包
+# ============================================================================
+
+ARG DEBIAN_FRONTEND="noninteractive"
+RUN apt-get update \
+    &amp;&amp; apt-get install -y \
+        ca-certificates curl gnupg locales openssh-server sudo vim \
+        build-essential libssh-dev pkg-config \
+        git redis-tools \
+        htop numactl jq rsync tmux tree \
+    &amp;&amp; apt-get clean \
+    &amp;&amp; rm -rf /var/lib/apt/lists/*
+
+# 添加 Docker 仓库
+RUN install -m 0755 -d /etc/apt/keyrings \
+    &amp;&amp; curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc \
+    &amp;&amp; chmod a+r /etc/apt/keyrings/docker.asc \
+    &amp;&amp; echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] \
+        https://download.docker.com/linux/debian trixie stable" \
+        | tee /etc/apt/sources.list.d/docker.list
+
+# 添加 Kubernetes 仓库（v1.33，与服务器版本一致）
+RUN curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.33/deb/Release.key \
+        | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg \
+    &amp;&amp; echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] \
+        https://pkgs.k8s.io/core:/stable:/v1.33/deb/ /' \
+        | tee /etc/apt/sources.list.d/kubernetes.list
+
+# 添加 Helm 仓库
+RUN curl -fsSL https://packages.buildkite.com/helm-linux/helm-debian/gpgkey \
+        | gpg --dearmor | tee /usr/share/keyrings/helm.gpg &gt; /dev/null \
+    &amp;&amp; echo "deb [signed-by=/usr/share/keyrings/helm.gpg] \
+        https://packages.buildkite.com/helm-linux/helm-debian/any/ any main" \
+        | tee /etc/apt/sources.list.d/helm-stable-debian.list
+
+# 添加 PostgreSQL 仓库
+RUN install -d /usr/share/postgresql-common/pgdg \
+    &amp;&amp; curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc \
+        | gpg --dearmor -o /usr/share/postgresql-common/pgdg/apt.postgresql.org.gpg \
+    &amp;&amp; echo "deb [signed-by=/usr/share/postgresql-common/pgdg/apt.postgresql.org.gpg] \
+        https://apt.postgresql.org/pub/repos/apt trixie-pgdg main" \
+        | tee /etc/apt/sources.list.d/pgdg.list
+
+# 安装容器和数据库工具
+RUN apt-get update \
+    &amp;&amp; apt-get install -y \
+        docker-ce-cli docker-compose-plugin helm kubectl \
+        postgresql-client-18 \
+    &amp;&amp; apt-get clean \
+    &amp;&amp; rm -rf /var/lib/apt/lists/*
+
+# ============================================================================
+# 用户和系统配置（一般不需要修改）
+# ============================================================================
+
+RUN groupadd -g ${USER_GID} ${USERNAME} \
+    &amp;&amp; useradd -m -s /bin/bash -u ${USER_UID} -g ${USER_GID} ${USERNAME} \
+    &amp;&amp; echo ${USERNAME} ALL=\(root\) NOPASSWD:ALL &gt; /etc/sudoers.d/${USERNAME} \
+    &amp;&amp; chmod 0440 /etc/sudoers.d/${USERNAME}
+ENV HOME="/home/${USERNAME}"
+
+RUN mkdir -p ${HOME}/.config ${HOME}/.local \
+    &amp;&amp; chown -R ${USERNAME}:${USERNAME} ${HOME}/.config ${HOME}/.local
+
+RUN echo 'export GPG_TTY=$(tty)' &gt;&gt; ${HOME}/.bashrc
+
+USER ${USERNAME}
+RUN mkdir -p /home/${USERNAME}/.docker \
+    &amp;&amp; echo "export DOCKER_HOST=unix:///home/${USERNAME}/.docker/docker.sock" &gt;&gt; /home/${USERNAME}/.bashrc
+USER root
+
+RUN sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen \
+    &amp;&amp; locale-gen \
+    &amp;&amp; ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
+    &amp;&amp; echo "Asia/Shanghai" &gt; /etc/timezone \
+    &amp;&amp; dpkg-reconfigure -f noninteractive tzdata \
+    &amp;&amp; echo "TZ=Asia/Shanghai" &gt;&gt; /etc/environment \
+    &amp;&amp; echo "LANG=en_US.UTF-8" &gt;&gt; /etc/environment \
+    &amp;&amp; echo "LC_ALL=en_US.UTF-8" &gt;&gt; /etc/environment
+
+# ============================================================================
+# 个人开发环境（主要在这里定制）
+# ============================================================================
+
+# 安装自己需要的额外软件包
+# RUN apt-get update \
+#     &amp;&amp; apt-get install -y \
+#         packages-that-you-need \
+#     &amp;&amp; apt-get clean \
+#     &amp;&amp; rm -rf /var/lib/apt/lists/*
+
+USER ${USERNAME}
+WORKDIR ${HOME}
+
+# 通过 Nix 安装自己需要的额外软件包（可选，用于安装一些 apt 未提供的软件包）
+# 这里安装 buck2、reindeer 作为示例
+RUN curl -L https://nixos.org/nix/install | sh -s -- --no-daemon \
+    &amp;&amp; echo '. ${HOME}/.nix-profile/etc/profile.d/nix.sh' &gt;&gt; ${HOME}/.bashrc
+ENV PATH="${HOME}/.nix-profile/bin:${PATH}"
+RUN . ${HOME}/.nix-profile/etc/profile.d/nix.sh \
+    &amp;&amp; nix-env -iA \
+        nixpkgs.buck2 nixpkgs.reindeer \
+    &amp;&amp; nix-collect-garbage -d
+
+# 安装 Rust 工具链
+# 可通过 cargo install 安装额外软件包，这里安装 mdbook、mdbook-mermaid 作为示例
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+ENV PATH="${HOME}/.cargo/bin:${PATH}"
+RUN cargo install --locked mdbook mdbook-mermaid \
+    &amp;&amp; rm -rf ${HOME}/.cargo/registry ${HOME}/.cargo/git
+
+# 安装 Python (Miniconda)
+# 这里添加 conda-forge 源，并创建名为 common 的环境作为示例
+RUN curl -LO https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh \
+    &amp;&amp; bash Miniconda3-latest-Linux-x86_64.sh -b \
+    &amp;&amp; rm Miniconda3-latest-Linux-x86_64.sh
+ENV PATH="${HOME}/miniconda3/bin:${PATH}"
+RUN conda init \
+    &amp;&amp; conda config --set auto_activate false \
+    &amp;&amp; conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/main \
+    &amp;&amp; conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/r \
+    &amp;&amp; conda config --remove-key channels \
+    &amp;&amp; conda config --add channels conda-forge \
+    &amp;&amp; conda create -n common python=3.13
+
+# Git 配置（请修改为你自己的信息）
+RUN git config --global user.name "Your Name" \
+    &amp;&amp; git config --global user.email "your@email.com"
+
+# ============================================================================
+# SSH 配置（如不了解其作用请勿修改）
+# ============================================================================
+
+USER root
+
+RUN mkdir -p /run/sshd \
+    &amp;&amp; sed -i 's/#PermitRootLogin.*/PermitRootLogin no/' /etc/ssh/sshd_config \
+    &amp;&amp; sed -i 's/#PasswordAuthentication.*/PasswordAuthentication no/' /etc/ssh/sshd_config \
+    &amp;&amp; sed -i 's/#PubkeyAuthentication.*/PubkeyAuthentication yes/' /etc/ssh/sshd_config
+
+CMD ["sh", "-c", "while true; do /usr/sbin/sshd -D; sleep 1; done"]
+</code></pre>
+<h2 id="常见定制场景"><a class="header" href="#常见定制场景">常见定制场景</a></h2>
+<p><strong>安装 Rust nightly 工具链并设为默认</strong>：</p>
+<pre><code class="language-dockerfile">RUN rustup toolchain install nightly \
+    &amp;&amp; rustup default nightly \
+    &amp;&amp; rustup component add rust-src
+</code></pre>
+<p><strong>使用 lld 作为链接器</strong>：</p>
+<p>可加快 Rust 项目的链接速度。首先确保安装了 lld。在“系统软件包/常用软件包”部分的 <code>apt-get install</code> 中添加 <code>lld</code>。然后在“个人开发环境”部分添加：</p>
+<pre><code class="language-dockerfile">RUN echo 'export RUSTFLAGS="-Clink-args=-fuse-ld=lld"' &gt;&gt; ${HOME}/.bashrc
+</code></pre>
+<p><strong>安装 Python 包到 conda 环境</strong>：</p>
+<pre><code class="language-dockerfile">RUN conda run -n common pip install numpy pandas torch
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="示例部署数据库"><a class="header" href="#示例部署数据库">示例：部署数据库</a></h1>
+<p>如果你的项目需要一个数据库（PostgreSQL、Redis、MongoDB 等），并且希望它一直运行、崩溃后自动重启、数据在重启后保留，那么用 <code>kubectl</code> 部署是合适的选择。对于临时任务（跑实验、调试脚本），用 tmux 更简单。</p>
+<p>本章以部署 PostgreSQL 为例，介绍如何在你的命名空间内部署一个长期运行的服务。</p>
+<h2 id="前置准备"><a class="header" href="#前置准备">前置准备</a></h2>
+<p>上一章的 Dockerfile 示例中，“系统软件包/常用软件包“部分安装了 <code>postgresql-client-18</code>，它提供 <code>psql</code> 命令行工具。本章假定你的容器中已安装该软件包。</p>
+<h2 id="编写部署文件"><a class="header" href="#编写部署文件">编写部署文件</a></h2>
+<p>创建文件 <code>~/workspace/postgres.yaml</code>：</p>
+<pre><code class="language-yaml">apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-data
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 50Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:18
+        env:
+        - name: POSTGRES_PASSWORD
+          value: "passwd"
+        - name: POSTGRES_USER
+          value: "rust"
+        - name: POSTGRES_DB
+          value: "app"
+        ports:
+        - containerPort: 5432
+        volumeMounts:
+        - name: data
+          mountPath: /var/lib/postgresql
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: postgres-data
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-postgres
+spec:
+  selector:
+    app: postgres
+  ports:
+  - port: 5432
+    targetPort: 5432
+</code></pre>
+<p>这个文件定义了三个资源：</p>
+<ul>
+<li><strong>PersistentVolumeClaim</strong>：申请 50GB 持久化存储，数据库文件存于此处，容器重启不会丢失</li>
+<li><strong>Deployment</strong>：声明运行一个 PostgreSQL 容器，挂载上述存储</li>
+<li><strong>Service</strong>：为数据库提供固定的访问地址 <code>my-postgres</code></li>
+</ul>
+<h2 id="部署"><a class="header" href="#部署">部署</a></h2>
+<p>执行部署：</p>
+<pre><code class="language-bash">kubectl apply -f ~/workspace/postgres.yaml
+</code></pre>
+<p>查看状态：</p>
+<pre><code class="language-bash">kubectl get pods,svc,pvc
+</code></pre>
+<p>这条命令同时查询三种资源：Pod（运行中的容器）、Service（简写 svc，服务访问入口）、PersistentVolumeClaim（简写 pvc，持久化存储）。你也可以分别查询，如 <code>kubectl get pods</code> 或 <code>kubectl get svc</code>。</p>
+<p>等待 Pod 状态变为 <code>Running</code>，PVC 状态变为 <code>Bound</code>。</p>
+<h2 id="连接数据库"><a class="header" href="#连接数据库">连接数据库</a></h2>
+<p>Service 名称 <code>my-postgres</code> 既是名字，也是访问这个服务的地址。如果你写程序来连接这个数据库，可以直接使用连接字符串 <code>postgres://rust:passwd@my-postgres:5432/app</code>。</p>
+<p>这里用 <code>psql</code> 命令行工具来连接：</p>
+<pre><code class="language-bash">PGPASSWORD=passwd psql -h my-postgres -U rust -d app
+</code></pre>
+<p>连接成功后，执行 <code>\dt+</code> 查看表列表（新数据库为空），按 <code>Ctrl+D</code> 退出。</p>
+<h2 id="常用命令"><a class="header" href="#常用命令">常用命令</a></h2>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>命令</th><th>作用</th></tr>
+</thead>
+<tbody>
+<tr><td><code>kubectl apply -f xxx.yaml</code></td><td>创建或更新资源</td></tr>
+<tr><td><code>kubectl get pods</code></td><td>查看 Pod 列表</td></tr>
+<tr><td><code>kubectl get svc</code></td><td>查看 Service 列表</td></tr>
+<tr><td><code>kubectl get pvc</code></td><td>查看持久化存储</td></tr>
+<tr><td><code>kubectl logs &lt;pod名&gt;</code></td><td>查看日志</td></tr>
+<tr><td><code>kubectl logs -f &lt;pod名&gt;</code></td><td>实时查看日志</td></tr>
+<tr><td><code>kubectl describe pod &lt;pod名&gt;</code></td><td>查看详细信息和事件</td></tr>
+<tr><td><code>kubectl exec -it &lt;pod名&gt; -- &lt;命令&gt;</code></td><td>在容器内执行命令</td></tr>
+<tr><td><code>kubectl delete -f xxx.yaml</code></td><td>删除资源</td></tr>
+</tbody>
+</table>
+</div>
+<h2 id="删除数据库"><a class="header" href="#删除数据库">删除数据库</a></h2>
+<pre><code class="language-bash">kubectl delete svc my-postgres
+kubectl delete deployment postgres
+# kubectl delete pvc postgres-data
+</code></pre>
+<p>若只删除 Deployment 和 Service 但保留 PVC，数据不会丢失，下次重新 <code>kubectl apply</code> 时数据仍在。</p>
+<p>如果想连数据一起删除，还需执行上面被注释掉的 <code>kubectl delete pvc postgres-data</code>。也可以用 <code>kubectl delete -f ~/workspace/postgres.yaml</code> 效果与执行上述三条命令相同。删除 PVC 前请确认数据已备份或确实不再需要。</p>
+<h2 id="常见问题"><a class="header" href="#常见问题">常见问题</a></h2>
+<p>如果连接数据库时出现问题，首先执行 <code>kubectl get pods</code> 查看 Pod 状态。</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>现象</th><th>可能原因</th><th>解决方法</th></tr>
+</thead>
+<tbody>
+<tr><td>Pod 状态 <code>Pending</code></td><td>PVC 未绑定或资源不足</td><td><code>kubectl describe pod &lt;pod名&gt;</code> 查看事件</td></tr>
+<tr><td>Pod 状态 <code>CrashLoopBackOff</code></td><td>容器启动后崩溃</td><td><code>kubectl logs &lt;pod名&gt;</code> 查看错误信息</td></tr>
+<tr><td>连接被拒绝</td><td>Service 名称错误或 Pod 未就绪</td><td>确认 <code>kubectl get pods</code> 显示 Running</td></tr>
+</tbody>
+</table>
+</div>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="示例部署web应用"><a class="header" href="#示例部署web应用">示例：部署Web应用</a></h1>
+<p>本章以一个最简单的 Flask 应用为例，演示如何构建镜像、推送到仓库、部署到集群并从外网访问。</p>
+<h2 id="整体流程"><a class="header" href="#整体流程">整体流程</a></h2>
+<pre class="mermaid">flowchart LR
+    Code["编写代码"] --&gt; Build["构建镜像"]
+    Build --&gt; Push["推送到仓库"]
+    Push --&gt; Deploy["kubectl apply"]
+    Deploy --&gt; Test["测试访问"]
+    Test --&gt;|"需要修改"| Code
+</pre>
+
+<h2 id="项目结构"><a class="header" href="#项目结构">项目结构</a></h2>
+<pre><code>~/workspace/myapp/
+├── log/
+│   └── visitors.log
+├── app.py
+├── Dockerfile
+├── deployment.yaml
+└── deploy.sh
+</code></pre>
+<h2 id="编写应用"><a class="header" href="#编写应用">编写应用</a></h2>
+<p>创建项目目录和日志目录：</p>
+<pre><code class="language-bash">mkdir -p ~/workspace/myapp/log
+cd ~/workspace/myapp
+</code></pre>
+<p>创建 <code>app.py</code>：</p>
+<pre><code class="language-python">import os
+from flask import Flask, request
+
+app = Flask(__name__)
+
+@app.route('/greeting')
+def greeting():
+    name = request.args.get('name', 'World')
+    ip = request.remote_addr
+
+    log_dir = '/log'
+    log_file = os.path.join(log_dir, 'visitors.log')
+
+    with open(log_file, 'a') as f:
+        f.write(f'{name} from {ip}\n')
+
+    return f'Hello, {name}!\n'
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=8080)
+</code></pre>
+<p>创建 <code>Dockerfile</code>。注意把 <code>11XX</code> 替换成你的 UID/GID（如 <code>stu02</code> 对应 <code>1102</code>）：</p>
+<pre><code class="language-dockerfile">FROM python:3.13-slim
+WORKDIR /app
+RUN pip install --no-cache-dir flask
+COPY app.py .
+RUN useradd -u 11XX appuser
+USER appuser
+EXPOSE 8080
+CMD ["python", "app.py"]
+</code></pre>
+<h2 id="编写部署文件-1"><a class="header" href="#编写部署文件-1">编写部署文件</a></h2>
+<p>创建 <code>deployment.yaml</code>。文件中有四处需要替换：把 <code>stuXX</code> 替换成你的账号（如 <code>stu02</code>），把 <code>11XX</code> 替换成对应的 UID/GID（如 <code>1102</code>）。</p>
+<pre><code class="language-yaml">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: myapp
+  template:
+    metadata:
+      labels:
+        app: myapp
+    spec:
+      securityContext:
+        runAsUser: 11XX      # 替换 1
+        runAsGroup: 11XX     # 替换 2
+        fsGroup: 11XX        # 替换 3
+      containers:
+        - name: myapp
+          image: registry.io:5000/myapp:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: log
+              mountPath: /log
+      volumes:
+        - name: log
+          hostPath:
+            path: /home/stuXX/workspace/myapp/log  # 替换 4
+            type: Directory
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: myapp-svc
+spec:
+  type: NodePort
+  selector:
+    app: myapp
+  ports:
+    - port: 8080
+      targetPort: 8080
+      nodePort: 30080
+</code></pre>
+<p>说明：</p>
+<ul>
+<li><code>registry.io:5000</code>：宿主机上已配置的本地镜像仓库，用于存放你构建的镜像</li>
+<li><code>imagePullPolicy: Always</code>：每次部署都拉取最新镜像</li>
+<li><code>type: NodePort</code>：在服务器的指定端口暴露服务，可从外网访问</li>
+<li><code>nodePort: 30080</code>：服务器上的端口号，范围 30000–32767，如果与其他同学冲突就换一个</li>
+<li><code>runAsUser</code>、<code>runAsGroup</code>、<code>fsGroup</code>：指定容器运行时的用户和组，确保挂载目录中创建的文件拥有正确的权限，你才能在工作区容器中读写这些文件</li>
+</ul>
+<p>关于目录挂载：你在工作区容器中看到的 <code>/home/rust/workspace</code> 目录实际上是从宿主机的 <code>/home/stuXX/workspace</code> 映射来的。在 deployment.yaml 中挂载目录时，需要使用宿主机上的真实路径。可用于挂载的目录有两组：</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>工作区容器中的路径</th><th>宿主机上的真实路径</th></tr>
+</thead>
+<tbody>
+<tr><td><code>~/workspace/&lt;子路径&gt;</code></td><td><code>/home/stuXX/workspace/&lt;子路径&gt;</code></td></tr>
+<tr><td><code>/data/&lt;子路径&gt;</code></td><td><code>/data/stuXX/data/&lt;子路径&gt;</code></td></tr>
+</tbody>
+</table>
+</div>
+<h2 id="编写部署脚本"><a class="header" href="#编写部署脚本">编写部署脚本</a></h2>
+<p>创建 <code>deploy.sh</code>：</p>
+<pre><code class="language-bash">#!/bin/bash
+set -ex
+
+cd ~/workspace/myapp
+
+docker build -t registry.io:5000/myapp:latest .
+docker push registry.io:5000/myapp:latest
+
+kubectl apply -f deployment.yaml
+kubectl rollout restart deployment/myapp
+kubectl rollout status deployment/myapp
+</code></pre>
+<p>赋予执行权限：</p>
+<pre><code class="language-bash">chmod +x deploy.sh
+</code></pre>
+<h2 id="部署-1"><a class="header" href="#部署-1">部署</a></h2>
+<pre><code class="language-bash">./deploy.sh
+</code></pre>
+<p>脚本会依次构建镜像、推送到本地仓库、应用部署配置、重启并等待就绪。</p>
+<h2 id="测试"><a class="header" href="#测试">测试</a></h2>
+<p>如果你在校园网内，可以直接用浏览器访问：</p>
+<pre><code>http://114.212.189.54:30080/greeting?name=Rustacean
+</code></pre>
+<p>预期看到：</p>
+<pre><code>Hello, Rustacean!
+</code></pre>
+<p>访问后查看 <code>~/workspace/myapp/log/visitors.log</code>，应该能看到刚才的访问记录。每次访问都会追加一条日志，记录访问者的 name 参数和 IP 地址。</p>
+<h2 id="更新代码"><a class="header" href="#更新代码">更新代码</a></h2>
+<p>修改 <code>app.py</code> 后，再次执行 <code>./deploy.sh</code> 即可。</p>
+<h2 id="排查问题"><a class="header" href="#排查问题">排查问题</a></h2>
+<pre><code class="language-bash">kubectl get pods                      # 查看状态
+kubectl describe pod &lt;pod名&gt;          # 查看详细信息和事件
+kubectl logs &lt;pod名&gt;                  # 查看日志
+kubectl logs -f &lt;pod名&gt;               # 实时日志
+kubectl exec -it &lt;pod名&gt; -- /bin/bash # 进入容器调试
+</code></pre>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>现象</th><th>可能原因</th><th>解决方法</th></tr>
+</thead>
+<tbody>
+<tr><td><code>ImagePullBackOff</code></td><td>镜像名错误或未推送</td><td>检查镜像名，重新 <code>docker push</code></td></tr>
+<tr><td><code>CrashLoopBackOff</code></td><td>应用启动崩溃</td><td><code>kubectl logs</code> 查看错误</td></tr>
+<tr><td>无法访问 NodePort</td><td>端口被占用</td><td>换一个 nodePort 数值</td></tr>
+</tbody>
+</table>
+</div>
+<h2 id="可选使用-clusterip-替代-nodeport"><a class="header" href="#可选使用-clusterip-替代-nodeport">可选：使用 ClusterIP 替代 NodePort</a></h2>
+<p>如果不想在公网暴露端口，可以把 Service 的 <code>type: NodePort</code> 改为 ClusterIP，并删除 <code>nodePort</code> 行：</p>
+<pre><code class="language-yaml">apiVersion: v1
+kind: Service
+metadata:
+  name: myapp-svc
+spec:
+  type: ClusterIP
+  selector:
+    app: myapp
+  ports:
+    - port: 8080
+      targetPort: 8080
+</code></pre>
+<p>然后在本地电脑上执行 SSH 端口转发：</p>
+<pre><code class="language-bash">ssh -N rust2026 -L 8080:myapp-svc:8080
+</code></pre>
+<p>保持这个终端运行，然后访问 <code>http://localhost:8080/greeting?name=Rustacean</code>。这种方式更安全，适合开发调试阶段。</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr-ef4e11c1.min.js"></script>
+        <script src="mark-09e88c2c.min.js"></script>
+        <script src="searcher-c2a407aa.js"></script>
+
+        <script src="clipboard-1626706a.min.js"></script>
+        <script src="highlight-d866c8a3.js"></script>
+        <script src="book-a0b12cfe.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="mermaid-eefea253.min.js"></script>
+        <script src="mermaid-init-ccf746f1.js"></script>
+
+        <script>
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+
+
+    </div>
+    </body>
+</html>
